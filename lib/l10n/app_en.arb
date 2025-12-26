@@ -1,0 +1,50 @@
+{
+  "@@locale": "en",
+  "appTitle": "Daily Tasks",
+  "dailyTasks": "Daily Tasks",
+  "noTasksYet": "No tasks yet.",
+  "addTask": "Add Task",
+  "editTask": "Edit Task",
+  "settings": "Settings",
+
+  "titleLabel": "Title",
+  "dueDateLabel": "Due date",
+  "dueTimeLabel": "Due time",
+  "pick": "Pick",
+
+  "reminderLabel": "Reminder",
+  "reminderOff": "Off",
+  "reminderMinutesBefore": "{minutes} minutes before",
+  "reminderMinutesBeforeShort": "{minutes}m before",
+
+  "save": "Save",
+  "cancel": "Cancel",
+  "delete": "Delete",
+
+  "darkMode": "Dark Mode",
+  "language": "Language",
+  "english": "English",
+  "arabic": "Arabic",
+
+  "titleRequired": "Title is required.",
+  "dueAt": "Due {when}",
+
+  "taskRemindersChannelName": "Task reminders",
+  "taskRemindersChannelDescription": "Reminder notifications for scheduled tasks",
+
+  "@@reminderMinutesBefore": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "@@reminderMinutesBeforeShort": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "@@dueAt": {
+    "placeholders": {
+      "when": {"type": "String"}
+    }
+  }
+}

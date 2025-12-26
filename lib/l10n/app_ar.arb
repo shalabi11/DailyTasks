@@ -1,0 +1,50 @@
+{
+  "@@locale": "ar",
+  "appTitle": "المهام اليومية",
+  "dailyTasks": "المهام اليومية",
+  "noTasksYet": "لا توجد مهام بعد.",
+  "addTask": "إضافة مهمة",
+  "editTask": "تعديل المهمة",
+  "settings": "الإعدادات",
+
+  "titleLabel": "العنوان",
+  "dueDateLabel": "تاريخ الاستحقاق",
+  "dueTimeLabel": "وقت الاستحقاق",
+  "pick": "اختيار",
+
+  "reminderLabel": "تذكير",
+  "reminderOff": "إيقاف",
+  "reminderMinutesBefore": "قبل {minutes} دقيقة",
+  "reminderMinutesBeforeShort": "قبل {minutes}د",
+
+  "save": "حفظ",
+  "cancel": "إلغاء",
+  "delete": "حذف",
+
+  "darkMode": "الوضع الداكن",
+  "language": "اللغة",
+  "english": "الإنجليزية",
+  "arabic": "العربية",
+
+  "titleRequired": "العنوان مطلوب.",
+  "dueAt": "الاستحقاق {when}",
+
+  "taskRemindersChannelName": "تذكير المهام",
+  "taskRemindersChannelDescription": "إشعارات تذكير للمهام المجدولة",
+
+  "@@reminderMinutesBefore": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "@@reminderMinutesBeforeShort": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "@@dueAt": {
+    "placeholders": {
+      "when": {"type": "String"}
+    }
+  }
+}
