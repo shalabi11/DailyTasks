@@ -41,6 +41,11 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
     if (android != null) {
       final granted = await android.requestNotificationsPermission();
       ok = ok && (granted ?? true);
+
+      // Android 12+: ensure alarms are scheduled as exact.
+      // This may trigger a settings prompt depending on OS state.
+      final exactGranted = await android.requestExactAlarmsPermission();
+      ok = ok && (exactGranted ?? true);
     }
 
     if (ios != null) {
