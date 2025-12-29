@@ -28,8 +28,8 @@ class CircularDial extends CustomPainter {
     canvas.drawCircle(center, radius, outlinePaint);
 
     // Draw selection indicator line
-    final angle = (math.pi * 2 * selectedValue) / (isHourMode ? 24 : 60) -
-        math.pi / 2;
+    final angle =
+        (math.pi * 2 * selectedValue) / (isHourMode ? 24 : 60) - math.pi / 2;
     final lineEnd = Offset(
       center.dx + radius * math.cos(angle),
       center.dy + radius * math.sin(angle),

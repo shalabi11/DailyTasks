@@ -31,54 +31,79 @@ import 'l10n/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await TimezoneInit.initialize();
+  try {
+    // Initialize timezone support
+    await TimezoneInit.initialize();
 
-  await Hive.initFlutter();
-  if (!Hive.isAdapterRegistered(TaskHiveModelAdapter().typeId)) {
-    Hive.registerAdapter(TaskHiveModelAdapter());
+    // Initialize Hive database
+    await Hive.initFlutter();
+    if (!Hive.isAdapterRegistered(TaskHiveModelAdapter().typeId)) {
+      Hive.registerAdapter(TaskHiveModelAdapter());
+    }
+    final tasksBox = await Hive.openBox<TaskHiveModel>('tasks');
+    final settingsBox = await Hive.openBox('settings');
+
+    // Initialize notifications with proper error handling
+    final NotificationsRepository notificationsRepository =
+        FlutterLocalNotificationsRepository(FlutterLocalNotificationsPlugin());
+    
+    try {
+      await notificationsRepository.initialize();
+      await notificationsRepository.requestPermissions();
+    } catch (e) {
+      debugPrint('Warning: Failed to initialize notifications: $e');
+      // Continue running the app even if notifications fail to initialize
+    }
+
+    // Initialize repositories
+    final localDataSource = TasksLocalDataSource(tasksBox);
+    final repository = TasksRepositoryImpl(localDataSource);
+
+    final settingsLocal = SettingsLocalDataSource(settingsBox);
+    final settingsRepository = SettingsRepositoryImpl(settingsLocal);
+    final getSettings = GetSettings(settingsRepository);
+    final setDarkMode = SetDarkMode(settingsRepository);
+    final setLanguageCode = SetLanguageCode(settingsRepository);
+
+    // Initialize use cases
+    final getTasks = GetTasks(repository);
+    final addTask = AddTask(repository);
+    final updateTask = UpdateTask(repository);
+    final deleteTask = DeleteTask(repository);
+
+    final upsertTaskReminder = UpsertTaskReminder(notificationsRepository);
+    final cancelTaskReminder = CancelTaskReminder(notificationsRepository);
+
+    runApp(
+      AppRoot(
+        tasksCubit: TasksCubit(
+          getTasks: getTasks,
+          addTask: addTask,
+          updateTask: updateTask,
+          deleteTask: deleteTask,
+          upsertTaskReminder: upsertTaskReminder,
+          cancelTaskReminder: cancelTaskReminder,
+        )..load(),
+        settingsCubit: SettingsCubit(
+          getSettings: getSettings,
+          setDarkMode: setDarkMode,
+          setLanguageCode: setLanguageCode,
+        )..load(),
+      ),
+    );
+  } catch (e) {
+    debugPrint('Fatal error during app initialization: $e');
+    // Show error UI
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Text('Error initializing app: $e'),
+          ),
+        ),
+      ),
+    );
   }
-  final tasksBox = await Hive.openBox<TaskHiveModel>('tasks');
-  final settingsBox = await Hive.openBox('settings');
-
-  final NotificationsRepository notificationsRepository =
-      FlutterLocalNotificationsRepository(FlutterLocalNotificationsPlugin());
-  await notificationsRepository.initialize();
-  await notificationsRepository.requestPermissions();
-
-  final localDataSource = TasksLocalDataSource(tasksBox);
-  final repository = TasksRepositoryImpl(localDataSource);
-
-  final settingsLocal = SettingsLocalDataSource(settingsBox);
-  final settingsRepository = SettingsRepositoryImpl(settingsLocal);
-  final getSettings = GetSettings(settingsRepository);
-  final setDarkMode = SetDarkMode(settingsRepository);
-  final setLanguageCode = SetLanguageCode(settingsRepository);
-
-  final getTasks = GetTasks(repository);
-  final addTask = AddTask(repository);
-  final updateTask = UpdateTask(repository);
-  final deleteTask = DeleteTask(repository);
-
-  final upsertTaskReminder = UpsertTaskReminder(notificationsRepository);
-  final cancelTaskReminder = CancelTaskReminder(notificationsRepository);
-
-  runApp(
-    AppRoot(
-      tasksCubit: TasksCubit(
-        getTasks: getTasks,
-        addTask: addTask,
-        updateTask: updateTask,
-        deleteTask: deleteTask,
-        upsertTaskReminder: upsertTaskReminder,
-        cancelTaskReminder: cancelTaskReminder,
-      )..load(),
-      settingsCubit: SettingsCubit(
-        getSettings: getSettings,
-        setDarkMode: setDarkMode,
-        setLanguageCode: setLanguageCode,
-      )..load(),
-    ),
-  );
 }
 
 class AppRoot extends StatelessWidget {

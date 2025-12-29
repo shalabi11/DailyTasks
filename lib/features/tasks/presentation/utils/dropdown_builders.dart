@@ -4,13 +4,9 @@ import '../../../../l10n/app_localizations.dart';
 import '../../domain/entities/task.dart';
 
 /// Builds category dropdown items
-List<DropdownMenuItem<TaskCategory>> buildCategoryItems(
-    AppLocalizations l10n) {
+List<DropdownMenuItem<TaskCategory>> buildCategoryItems(AppLocalizations l10n) {
   return [
-    DropdownMenuItem(
-      value: TaskCategory.work,
-      child: Text(l10n.categoryWork),
-    ),
+    DropdownMenuItem(value: TaskCategory.work, child: Text(l10n.categoryWork)),
     DropdownMenuItem(
       value: TaskCategory.personal,
       child: Text(l10n.categoryPersonal),
@@ -35,27 +31,21 @@ List<DropdownMenuItem<TaskCategory>> buildCategoryItems(
 }
 
 /// Builds priority dropdown items
-List<DropdownMenuItem<TaskPriority>> buildPriorityItems(
-    AppLocalizations l10n) {
+List<DropdownMenuItem<TaskPriority>> buildPriorityItems(AppLocalizations l10n) {
   return [
-    DropdownMenuItem(
-      value: TaskPriority.low,
-      child: Text(l10n.priorityLow),
-    ),
+    DropdownMenuItem(value: TaskPriority.low, child: Text(l10n.priorityLow)),
     DropdownMenuItem(
       value: TaskPriority.medium,
       child: Text(l10n.priorityMedium),
     ),
-    DropdownMenuItem(
-      value: TaskPriority.high,
-      child: Text(l10n.priorityHigh),
-    ),
+    DropdownMenuItem(value: TaskPriority.high, child: Text(l10n.priorityHigh)),
   ];
 }
 
 /// Builds recurrence dropdown items
 List<DropdownMenuItem<RecurrenceType>> buildRecurrenceItems(
-    AppLocalizations l10n) {
+  AppLocalizations l10n,
+) {
   return [
     DropdownMenuItem(
       value: RecurrenceType.none,
@@ -79,10 +69,7 @@ List<DropdownMenuItem<RecurrenceType>> buildRecurrenceItems(
 /// Builds reminder dropdown items
 List<DropdownMenuItem<int?>> buildReminderItems(AppLocalizations l10n) {
   return [
-    DropdownMenuItem<int?>(
-      value: null,
-      child: Text(l10n.reminderOff),
-    ),
+    DropdownMenuItem<int?>(value: null, child: Text(l10n.reminderOff)),
     DropdownMenuItem<int?>(
       value: 5,
       child: Text(l10n.reminderMinutesBefore(5)),

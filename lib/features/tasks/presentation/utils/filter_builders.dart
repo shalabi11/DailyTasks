@@ -39,9 +39,7 @@ List<PopupMenuItem<String>> buildTaskFilterItems({
       child: Row(
         children: [
           Icon(
-            selectedFilter == 'completed'
-                ? Icons.check
-                : Icons.circle_outlined,
+            selectedFilter == 'completed' ? Icons.check : Icons.circle_outlined,
             size: 18,
           ),
           const SizedBox(width: 8),

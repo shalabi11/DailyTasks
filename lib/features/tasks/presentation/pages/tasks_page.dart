@@ -126,10 +126,8 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
                 _statusFilter = value;
               });
             },
-            itemBuilder: (context) => buildTaskFilterItems(
-              selectedFilter: _statusFilter,
-              l10n: l10n,
-            ),
+            itemBuilder: (context) =>
+                buildTaskFilterItems(selectedFilter: _statusFilter, l10n: l10n),
           ),
           const SizedBox(width: 4),
           RotationTransition(

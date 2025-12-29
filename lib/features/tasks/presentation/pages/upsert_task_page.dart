@@ -224,9 +224,9 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
     final title = _titleController.text;
 
     if (!validateTaskTitle(title)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.titleRequired)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.titleRequired)));
       return;
     }
 
