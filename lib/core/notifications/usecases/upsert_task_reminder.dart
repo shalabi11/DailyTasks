@@ -15,7 +15,9 @@ class UpsertTaskReminder {
       final notificationId = _notificationIdFor(task.id);
 
       if (kDebugMode) {
-        debugPrint('UpsertTaskReminder: Upserting reminder for task ${task.id}');
+        debugPrint(
+          'UpsertTaskReminder: Upserting reminder for task ${task.id}',
+        );
         debugPrint('  Title: ${task.title}');
         debugPrint('  Due: ${task.dueAt}');
         debugPrint('  Completed: ${task.isCompleted}');
@@ -44,7 +46,7 @@ class UpsertTaskReminder {
 
       // Calculate the scheduled time
       final scheduledAt = task.dueAt.subtract(Duration(minutes: offsetMinutes));
-      
+
       // Don't schedule notifications in the past
       if (!scheduledAt.isAfter(DateTime.now())) {
         if (kDebugMode) {
@@ -55,7 +57,8 @@ class UpsertTaskReminder {
       }
 
       // Format the due time for display
-      final when = _notifications.formatDueAt(task.dueAt, locale: locale) ??
+      final when =
+          _notifications.formatDueAt(task.dueAt, locale: locale) ??
           task.dueAt.toIso8601String();
 
       // Get localized strings

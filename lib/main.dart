@@ -46,7 +46,7 @@ Future<void> main() async {
     // Initialize notifications with proper error handling
     final NotificationsRepository notificationsRepository =
         FlutterLocalNotificationsRepository(FlutterLocalNotificationsPlugin());
-    
+
     try {
       await notificationsRepository.initialize();
       await notificationsRepository.requestPermissions();
@@ -96,11 +96,7 @@ Future<void> main() async {
     // Show error UI
     runApp(
       MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Text('Error initializing app: $e'),
-          ),
-        ),
+        home: Scaffold(body: Center(child: Text('Error initializing app: $e'))),
       ),
     );
   }

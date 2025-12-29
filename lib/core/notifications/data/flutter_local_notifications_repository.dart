@@ -19,7 +19,9 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
     if (_initialized) return;
 
     try {
-      const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
       const iosSettings = DarwinInitializationSettings(
         requestSoundPermission: true,
         requestBadgePermission: true,
@@ -28,7 +30,7 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
         defaultPresentSound: true,
         defaultPresentBadge: true,
       );
-      
+
       const initSettings = InitializationSettings(
         android: androidSettings,
         iOS: iosSettings,
@@ -38,11 +40,11 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
         initSettings,
         onDidReceiveNotificationResponse: _handleNotificationResponse,
       );
-      
+
       if (kDebugMode) {
         debugPrint('Notifications initialized successfully: $success');
       }
-      
+
       _initialized = true;
     } catch (e, st) {
       if (kDebugMode) {
@@ -63,7 +65,7 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
   Future<bool> requestPermissions() async {
     try {
       await initialize();
-      
+
       final android = _plugin
           .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin
@@ -77,15 +79,17 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
 
       if (android != null) {
         try {
-          final notificationsGranted = 
-              await android.requestNotificationsPermission();
+          final notificationsGranted = await android
+              .requestNotificationsPermission();
           if (kDebugMode) {
-            debugPrint('Android notifications permission: $notificationsGranted');
+            debugPrint(
+              'Android notifications permission: $notificationsGranted',
+            );
           }
           allGranted = allGranted && (notificationsGranted ?? false);
 
-          final exactAlarmsGranted = 
-              await android.requestExactAlarmsPermission();
+          final exactAlarmsGranted = await android
+              .requestExactAlarmsPermission();
           if (kDebugMode) {
             debugPrint('Android exact alarms permission: $exactAlarmsGranted');
           }
@@ -121,7 +125,7 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
       if (kDebugMode) {
         debugPrint('All permissions granted: $allGranted');
       }
-      
+
       return allGranted;
     } catch (e, st) {
       if (kDebugMode) {
@@ -192,7 +196,7 @@ class FlutterLocalNotificationsRepository implements NotificationsRepository {
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: null,
       );
-      
+
       if (kDebugMode) {
         debugPrint('Notification $id scheduled successfully');
       }
