@@ -106,7 +106,6 @@ class AppRoot extends StatelessWidget {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsCubit, SettingsState>(
@@ -114,20 +113,32 @@ class MyApp extends StatelessWidget {
         final settings = SettingsCubit.effective(state);
         final locale = Locale(settings.languageCode);
 
-        return MaterialApp(
-          onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-          theme: AppTheme.light(),
-          darkTheme: AppTheme.dark(),
-          themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-          locale: locale,
-          supportedLocales: AppLocalizations.supportedLocales,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          home: const SplashPage(),
+        return AnimatedTheme(
+          data: settings.isDarkMode ? AppTheme.dark() : AppTheme.light(),
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+          child: Builder(
+            builder: (context) {
+              return MaterialApp(
+                onGenerateTitle: (context) =>
+                    AppLocalizations.of(context).appTitle,
+                theme: AppTheme.light(),
+                darkTheme: AppTheme.dark(),
+                themeMode: settings.isDarkMode
+                    ? ThemeMode.dark
+                    : ThemeMode.light,
+                locale: locale,
+                supportedLocales: AppLocalizations.supportedLocales,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                home: const SplashPage(),
+              );
+            },
+          ),
         );
       },
     );
