@@ -73,13 +73,12 @@ class _SplashPageState extends State<SplashPage>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(
-                  'assets/images/logo2.png',
-                  width: 120,
-                  height: 120,
-                  fit: BoxFit.contain,
+                Icon(
+                  Icons.task_alt,
+                  size: 72,
+                  color: theme.colorScheme.primary,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
                 Text(
                   l10n.appTitle,
                   style: theme.textTheme.headlineSmall?.copyWith(
