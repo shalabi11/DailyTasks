@@ -63,7 +63,12 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   Future<void> toggleCompleted(Task task) async {
-    final updated = task.copyWith(isCompleted: !task.isCompleted);
+    final now = DateTime.now();
+    final updated = task.copyWith(
+      isCompleted: !task.isCompleted,
+      completedAt: !task.isCompleted ? now : null,
+      clearCompletedAt: task.isCompleted,
+    );
     await update(updated);
   }
 

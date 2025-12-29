@@ -84,6 +84,87 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get categoryLabel => 'الفئة';
+
+  @override
+  String get priorityLabel => 'الأولوية';
+
+  @override
+  String get recurrenceLabel => 'التكرار';
+
+  @override
+  String get categoryWork => 'عمل';
+
+  @override
+  String get categoryPersonal => 'شخصي';
+
+  @override
+  String get categoryUrgent => 'عاجل';
+
+  @override
+  String get categoryShopping => 'تسوق';
+
+  @override
+  String get categoryHealth => 'صحة';
+
+  @override
+  String get categoryOther => 'أخرى';
+
+  @override
+  String get priorityLow => 'منخفضة';
+
+  @override
+  String get priorityMedium => 'متوسطة';
+
+  @override
+  String get priorityHigh => 'عالية';
+
+  @override
+  String get recurrenceNone => 'لا يوجد';
+
+  @override
+  String get recurrenceDaily => 'يومي';
+
+  @override
+  String get recurrenceWeekly => 'أسبوعي';
+
+  @override
+  String get recurrenceMonthly => 'شهري';
+
+  @override
+  String get filterAll => 'الكل';
+
+  @override
+  String get filterActive => 'نشطة';
+
+  @override
+  String get filterCompleted => 'مكتملة';
+
+  @override
+  String get statistics => 'الإحصائيات';
+
+  @override
+  String get statsTitle => 'إحصائيات المهام';
+
+  @override
+  String get statsTotal => 'إجمالي المهام';
+
+  @override
+  String get statsCompleted => 'المكتملة';
+
+  @override
+  String get statsActive => 'النشطة';
+
+  @override
+  String get statsCompletionRate => 'معدل الإنجاز';
+
+  @override
+  String get statsByCategory => 'حسب الفئة';
+
+  @override
+  String get statsByPriority => 'حسب الأولوية';
+
+  @override
   String get taskRemindersChannelName => 'تذكير المهام';
 
   @override

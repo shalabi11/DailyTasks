@@ -22,6 +22,9 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
   late DateTime _dueDate;
   late TimeOfDay _dueTime;
   int? _reminderOffsetMinutes;
+  late TaskCategory _category;
+  late TaskPriority _priority;
+  late RecurrenceType _recurrence;
   late final AnimationController _animController;
   late final Animation<double> _fadeAnimation;
   late final Animation<Offset> _slideAnimation;
@@ -39,6 +42,9 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
     _dueDate = DateUtils.dateOnly(initialDueAt);
     _dueTime = TimeOfDay.fromDateTime(existingDueAt ?? DateTime.now());
     _reminderOffsetMinutes = widget.existingTask?.reminderOffsetMinutes;
+    _category = widget.existingTask?.category ?? TaskCategory.other;
+    _priority = widget.existingTask?.priority ?? TaskPriority.medium;
+    _recurrence = widget.existingTask?.recurrence ?? RecurrenceType.none;
 
     _animController = AnimationController(
       vsync: this,
@@ -100,6 +106,103 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                   label: l10n.dueTimeLabel,
                   value: _dueTime.format(context),
                   onTap: _pickTime,
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<TaskCategory>(
+                  value: _category,
+                  decoration: InputDecoration(
+                    labelText: l10n.categoryLabel,
+                    prefixIcon: const Icon(Icons.category_rounded),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: TaskCategory.work,
+                      child: Text(l10n.categoryWork),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskCategory.personal,
+                      child: Text(l10n.categoryPersonal),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskCategory.urgent,
+                      child: Text(l10n.categoryUrgent),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskCategory.shopping,
+                      child: Text(l10n.categoryShopping),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskCategory.health,
+                      child: Text(l10n.categoryHealth),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskCategory.other,
+                      child: Text(l10n.categoryOther),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _category = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<TaskPriority>(
+                  value: _priority,
+                  decoration: InputDecoration(
+                    labelText: l10n.priorityLabel,
+                    prefixIcon: const Icon(Icons.flag_rounded),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: TaskPriority.low,
+                      child: Text(l10n.priorityLow),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskPriority.medium,
+                      child: Text(l10n.priorityMedium),
+                    ),
+                    DropdownMenuItem(
+                      value: TaskPriority.high,
+                      child: Text(l10n.priorityHigh),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _priority = value!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 12),
+                DropdownButtonFormField<RecurrenceType>(
+                  value: _recurrence,
+                  decoration: InputDecoration(
+                    labelText: l10n.recurrenceLabel,
+                    prefixIcon: const Icon(Icons.repeat_rounded),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: RecurrenceType.none,
+                      child: Text(l10n.recurrenceNone),
+                    ),
+                    DropdownMenuItem(
+                      value: RecurrenceType.daily,
+                      child: Text(l10n.recurrenceDaily),
+                    ),
+                    DropdownMenuItem(
+                      value: RecurrenceType.weekly,
+                      child: Text(l10n.recurrenceWeekly),
+                    ),
+                    DropdownMenuItem(
+                      value: RecurrenceType.monthly,
+                      child: Text(l10n.recurrenceMonthly),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      _recurrence = value!;
+                    });
+                  },
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int?>(
@@ -204,6 +307,10 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
       dueAt: dueAt,
       isCompleted: widget.existingTask?.isCompleted ?? false,
       reminderOffsetMinutes: _reminderOffsetMinutes,
+      category: _category,
+      priority: _priority,
+      recurrence: _recurrence,
+      completedAt: widget.existingTask?.completedAt,
     );
 
     final cubit = context.read<TasksCubit>();

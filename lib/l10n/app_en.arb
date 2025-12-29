@@ -29,6 +29,39 @@
   "titleRequired": "Title is required.",
   "dueAt": "Due {when}",
 
+  "categoryLabel": "Category",
+  "priorityLabel": "Priority",
+  "recurrenceLabel": "Recurrence",
+  
+  "categoryWork": "Work",
+  "categoryPersonal": "Personal",
+  "categoryUrgent": "Urgent",
+  "categoryShopping": "Shopping",
+  "categoryHealth": "Health",
+  "categoryOther": "Other",
+  
+  "priorityLow": "Low",
+  "priorityMedium": "Medium",
+  "priorityHigh": "High",
+  
+  "recurrenceNone": "None",
+  "recurrenceDaily": "Daily",
+  "recurrenceWeekly": "Weekly",
+  "recurrenceMonthly": "Monthly",
+  
+  "filterAll": "All",
+  "filterActive": "Active",
+  "filterCompleted": "Completed",
+  "statistics": "Statistics",
+  
+  "statsTitle": "Task Statistics",
+  "statsTotal": "Total Tasks",
+  "statsCompleted": "Completed",
+  "statsActive": "Active",
+  "statsCompletionRate": "Completion Rate",
+  "statsByCategory": "By Category",
+  "statsByPriority": "By Priority",
+
   "taskRemindersChannelName": "Task reminders",
   "taskRemindersChannelDescription": "Reminder notifications for scheduled tasks",
 

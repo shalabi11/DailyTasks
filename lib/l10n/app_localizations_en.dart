@@ -84,6 +84,87 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get categoryLabel => 'Category';
+
+  @override
+  String get priorityLabel => 'Priority';
+
+  @override
+  String get recurrenceLabel => 'Recurrence';
+
+  @override
+  String get categoryWork => 'Work';
+
+  @override
+  String get categoryPersonal => 'Personal';
+
+  @override
+  String get categoryUrgent => 'Urgent';
+
+  @override
+  String get categoryShopping => 'Shopping';
+
+  @override
+  String get categoryHealth => 'Health';
+
+  @override
+  String get categoryOther => 'Other';
+
+  @override
+  String get priorityLow => 'Low';
+
+  @override
+  String get priorityMedium => 'Medium';
+
+  @override
+  String get priorityHigh => 'High';
+
+  @override
+  String get recurrenceNone => 'None';
+
+  @override
+  String get recurrenceDaily => 'Daily';
+
+  @override
+  String get recurrenceWeekly => 'Weekly';
+
+  @override
+  String get recurrenceMonthly => 'Monthly';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterActive => 'Active';
+
+  @override
+  String get filterCompleted => 'Completed';
+
+  @override
+  String get statistics => 'Statistics';
+
+  @override
+  String get statsTitle => 'Task Statistics';
+
+  @override
+  String get statsTotal => 'Total Tasks';
+
+  @override
+  String get statsCompleted => 'Completed';
+
+  @override
+  String get statsActive => 'Active';
+
+  @override
+  String get statsCompletionRate => 'Completion Rate';
+
+  @override
+  String get statsByCategory => 'By Category';
+
+  @override
+  String get statsByPriority => 'By Priority';
+
+  @override
   String get taskRemindersChannelName => 'Task reminders';
 
   @override

@@ -28,7 +28,38 @@
 
   "titleRequired": "العنوان مطلوب.",
   "dueAt": "الاستحقاق {when}",
-
+  "categoryLabel": "الفئة",
+  "priorityLabel": "الأولوية",
+  "recurrenceLabel": "التكرار",
+  
+  "categoryWork": "عمل",
+  "categoryPersonal": "شخصي",
+  "categoryUrgent": "عاجل",
+  "categoryShopping": "تسوق",
+  "categoryHealth": "صحة",
+  "categoryOther": "أخرى",
+  
+  "priorityLow": "منخفضة",
+  "priorityMedium": "متوسطة",
+  "priorityHigh": "عالية",
+  
+  "recurrenceNone": "لا يوجد",
+  "recurrenceDaily": "يومي",
+  "recurrenceWeekly": "أسبوعي",
+  "recurrenceMonthly": "شهري",
+  
+  "filterAll": "الكل",
+  "filterActive": "نشطة",
+  "filterCompleted": "مكتملة",
+  "statistics": "الإحصائيات",
+  
+  "statsTitle": "إحصائيات المهام",
+  "statsTotal": "إجمالي المهام",
+  "statsCompleted": "المكتملة",
+  "statsActive": "النشطة",
+  "statsCompletionRate": "معدل الإنجاز",
+  "statsByCategory": "حسب الفئة",
+  "statsByPriority": "حسب الأولوية",
   "taskRemindersChannelName": "تذكير المهام",
   "taskRemindersChannelDescription": "إشعارات تذكير للمهام المجدولة",
 

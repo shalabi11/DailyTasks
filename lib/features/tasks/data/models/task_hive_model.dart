@@ -9,6 +9,10 @@ class TaskHiveModel {
     required this.dueAtMillis,
     required this.isCompleted,
     required this.reminderOffsetMinutes,
+    required this.categoryIndex,
+    required this.priorityIndex,
+    required this.recurrenceIndex,
+    this.completedAtMillis,
   });
 
   final String id;
@@ -16,6 +20,10 @@ class TaskHiveModel {
   final int dueAtMillis;
   final bool isCompleted;
   final int? reminderOffsetMinutes;
+  final int categoryIndex;
+  final int priorityIndex;
+  final int recurrenceIndex;
+  final int? completedAtMillis;
 
   Task toEntity() {
     return Task(
@@ -24,6 +32,12 @@ class TaskHiveModel {
       dueAt: DateTime.fromMillisecondsSinceEpoch(dueAtMillis),
       isCompleted: isCompleted,
       reminderOffsetMinutes: reminderOffsetMinutes,
+      category: TaskCategory.values[categoryIndex],
+      priority: TaskPriority.values[priorityIndex],
+      recurrence: RecurrenceType.values[recurrenceIndex],
+      completedAt: completedAtMillis != null
+          ? DateTime.fromMillisecondsSinceEpoch(completedAtMillis!)
+          : null,
     );
   }
 
@@ -34,6 +48,10 @@ class TaskHiveModel {
       dueAtMillis: task.dueAt.millisecondsSinceEpoch,
       isCompleted: task.isCompleted,
       reminderOffsetMinutes: task.reminderOffsetMinutes,
+      categoryIndex: task.category.index,
+      priorityIndex: task.priority.index,
+      recurrenceIndex: task.recurrence.index,
+      completedAtMillis: task.completedAt?.millisecondsSinceEpoch,
     );
   }
 }
@@ -55,13 +73,17 @@ class TaskHiveModelAdapter extends TypeAdapter<TaskHiveModel> {
       dueAtMillis: (fields[2] as int?) ?? DateTime.now().millisecondsSinceEpoch,
       isCompleted: (fields[3] as bool?) ?? false,
       reminderOffsetMinutes: fields[4] as int?,
+      categoryIndex: (fields[5] as int?) ?? 5,
+      priorityIndex: (fields[6] as int?) ?? 1,
+      recurrenceIndex: (fields[7] as int?) ?? 0,
+      completedAtMillis: fields[8] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, TaskHiveModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -71,6 +93,14 @@ class TaskHiveModelAdapter extends TypeAdapter<TaskHiveModel> {
       ..writeByte(3)
       ..write(obj.isCompleted)
       ..writeByte(4)
-      ..write(obj.reminderOffsetMinutes);
+      ..write(obj.reminderOffsetMinutes)
+      ..writeByte(5)
+      ..write(obj.categoryIndex)
+      ..writeByte(6)
+      ..write(obj.priorityIndex)
+      ..writeByte(7)
+      ..write(obj.recurrenceIndex)
+      ..writeByte(8)
+      ..write(obj.completedAtMillis);
   }
 }

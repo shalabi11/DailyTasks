@@ -11,6 +11,7 @@ import '../../../settings/presentation/pages/settings_page.dart';
 import '../cubit/tasks_cubit.dart';
 import '../cubit/tasks_state.dart';
 import '../widgets/task_card.dart';
+import 'statistics_page.dart';
 import 'upsert_task_page.dart';
 
 class TasksPage extends StatefulWidget {
@@ -26,6 +27,8 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
   var _syncedOnce = false;
   late final AnimationController _appBarController;
   late final Animation<double> _settingsRotation;
+  TaskCategory? _selectedCategory;
+  String _statusFilter = 'all';
 
   @override
   void initState() {
@@ -101,6 +104,70 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
           child: Text(l10n.dailyTasks),
         ),
         actions: [
+          IconButton(
+            tooltip: l10n.statistics,
+            onPressed: () => _openStatistics(context),
+            icon: const Icon(Icons.bar_chart_rounded),
+            style: IconButton.styleFrom(
+              backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+              foregroundColor: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 4),
+          PopupMenuButton<String>(
+            tooltip: 'Filter',
+            icon: Icon(
+              Icons.filter_list_rounded,
+              color: theme.colorScheme.primary,
+            ),
+            onSelected: (value) {
+              setState(() {
+                _statusFilter = value;
+              });
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'all',
+                child: Row(
+                  children: [
+                    Icon(
+                      _statusFilter == 'all' ? Icons.check : Icons.circle_outlined,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(l10n.filterAll),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'active',
+                child: Row(
+                  children: [
+                    Icon(
+                      _statusFilter == 'active' ? Icons.check : Icons.circle_outlined,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(l10n.filterActive),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 'completed',
+                child: Row(
+                  children: [
+                    Icon(
+                      _statusFilter == 'completed' ? Icons.check : Icons.circle_outlined,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(l10n.filterCompleted),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 4),
           RotationTransition(
             turns: _settingsRotation,
             child: IconButton(
@@ -226,7 +293,8 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
   }
 
   void _syncAnimatedList(List<Task> latest) {
-    final latestOrder = latest.map((t) => t.id).toList(growable: false);
+    final filtered = _filterTasks(latest);
+    final latestOrder = filtered.map((t) => t.id).toList(growable: false);
     final latestIds = latestOrder.toSet();
     var didInsertOrRemove = false;
 
@@ -256,8 +324,8 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
     final currentIds = _tasks.map((t) => t.id).toSet();
 
     // Insert new items.
-    for (var i = 0; i < latest.length; i++) {
-      final task = latest[i];
+    for (var i = 0; i < filtered.length; i++) {
+      final task = filtered[i];
       if (!currentIds.contains(task.id)) {
         _tasks.insert(i, task);
         didInsertOrRemove = true;
@@ -292,6 +360,24 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
     });
   }
 
+  List<Task> _filterTasks(List<Task> tasks) {
+    var filtered = tasks;
+    
+    // Filter by status
+    if (_statusFilter == 'active') {
+      filtered = filtered.where((t) => !t.isCompleted).toList();
+    } else if (_statusFilter == 'completed') {
+      filtered = filtered.where((t) => t.isCompleted).toList();
+    }
+    
+    // Filter by category
+    if (_selectedCategory != null) {
+      filtered = filtered.where((t) => t.category == _selectedCategory).toList();
+    }
+    
+    return filtered;
+  }
+
   void _openUpsert(BuildContext context, {Task? task}) {
     Navigator.of(
       context,
@@ -300,5 +386,9 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
 
   void _openSettings(BuildContext context) {
     Navigator.of(context).push(fadeSlideRoute(const SettingsPage()));
+  }
+
+  void _openStatistics(BuildContext context) {
+    Navigator.of(context).push(fadeSlideRoute(const StatisticsPage()));
   }
 }
