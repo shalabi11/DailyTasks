@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/task.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/tasks_cubit.dart';
 import '../widgets/datetime_pickers/animated_date_picker.dart';
 import '../widgets/datetime_pickers/animated_time_picker.dart';
+import '../widgets/date_time_card.dart';
+import '../widgets/animated_button.dart';
 import '../utils/time_utils.dart';
+import '../utils/dropdown_builders.dart';
+import '../utils/task_form_utils.dart';
 
 class UpsertTaskPage extends StatefulWidget {
   const UpsertTaskPage({super.key, this.existingTask});
@@ -96,14 +99,14 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                   textInputAction: TextInputAction.done,
                 ),
                 const SizedBox(height: 16),
-                _DateTimeCard(
+                DateTimeCard(
                   icon: Icons.calendar_today_rounded,
                   label: l10n.dueDateLabel,
                   value: formatDate(_dueDate, locale: localeTag),
                   onTap: _pickDate,
                 ),
                 const SizedBox(height: 8),
-                _DateTimeCard(
+                DateTimeCard(
                   icon: Icons.access_time_rounded,
                   label: l10n.dueTimeLabel,
                   value: formatTime(_dueTime, locale: localeTag),
@@ -116,32 +119,7 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                     labelText: l10n.categoryLabel,
                     prefixIcon: const Icon(Icons.category_rounded),
                   ),
-                  items: [
-                    DropdownMenuItem(
-                      value: TaskCategory.work,
-                      child: Text(l10n.categoryWork),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskCategory.personal,
-                      child: Text(l10n.categoryPersonal),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskCategory.urgent,
-                      child: Text(l10n.categoryUrgent),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskCategory.shopping,
-                      child: Text(l10n.categoryShopping),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskCategory.health,
-                      child: Text(l10n.categoryHealth),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskCategory.other,
-                      child: Text(l10n.categoryOther),
-                    ),
-                  ],
+                  items: buildCategoryItems(l10n),
                   onChanged: (value) {
                     setState(() {
                       _category = value!;
@@ -155,20 +133,7 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                     labelText: l10n.priorityLabel,
                     prefixIcon: const Icon(Icons.flag_rounded),
                   ),
-                  items: [
-                    DropdownMenuItem(
-                      value: TaskPriority.low,
-                      child: Text(l10n.priorityLow),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskPriority.medium,
-                      child: Text(l10n.priorityMedium),
-                    ),
-                    DropdownMenuItem(
-                      value: TaskPriority.high,
-                      child: Text(l10n.priorityHigh),
-                    ),
-                  ],
+                  items: buildPriorityItems(l10n),
                   onChanged: (value) {
                     setState(() {
                       _priority = value!;
@@ -182,24 +147,7 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                     labelText: l10n.recurrenceLabel,
                     prefixIcon: const Icon(Icons.repeat_rounded),
                   ),
-                  items: [
-                    DropdownMenuItem(
-                      value: RecurrenceType.none,
-                      child: Text(l10n.recurrenceNone),
-                    ),
-                    DropdownMenuItem(
-                      value: RecurrenceType.daily,
-                      child: Text(l10n.recurrenceDaily),
-                    ),
-                    DropdownMenuItem(
-                      value: RecurrenceType.weekly,
-                      child: Text(l10n.recurrenceWeekly),
-                    ),
-                    DropdownMenuItem(
-                      value: RecurrenceType.monthly,
-                      child: Text(l10n.recurrenceMonthly),
-                    ),
-                  ],
+                  items: buildRecurrenceItems(l10n),
                   onChanged: (value) {
                     setState(() {
                       _recurrence = value!;
@@ -213,24 +161,7 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                     labelText: l10n.reminderLabel,
                     prefixIcon: const Icon(Icons.notifications_rounded),
                   ),
-                  items: [
-                    DropdownMenuItem<int?>(
-                      value: null,
-                      child: Text(l10n.reminderOff),
-                    ),
-                    DropdownMenuItem<int?>(
-                      value: 5,
-                      child: Text(l10n.reminderMinutesBefore(5)),
-                    ),
-                    DropdownMenuItem<int?>(
-                      value: 10,
-                      child: Text(l10n.reminderMinutesBefore(10)),
-                    ),
-                    DropdownMenuItem<int?>(
-                      value: 30,
-                      child: Text(l10n.reminderMinutesBefore(30)),
-                    ),
-                  ],
+                  items: buildReminderItems(l10n),
                   onChanged: (value) {
                     setState(() {
                       _reminderOffsetMinutes = value;
@@ -238,13 +169,13 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                   },
                 ),
                 const SizedBox(height: 24),
-                _AnimatedButton(
+                AnimatedButton(
                   onPressed: _save,
                   label: l10n.save,
                   isPrimary: true,
                 ),
                 const SizedBox(height: 8),
-                _AnimatedButton(
+                AnimatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   label: l10n.cancel,
                   isPrimary: false,
@@ -290,32 +221,24 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
 
   Future<void> _save() async {
     final l10n = AppLocalizations.of(context);
-    final title = _titleController.text.trim();
-    if (title.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.titleRequired)));
+    final title = _titleController.text;
+
+    if (!validateTaskTitle(title)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.titleRequired)),
+      );
       return;
     }
 
-    final dueAt = DateTime(
-      _dueDate.year,
-      _dueDate.month,
-      _dueDate.day,
-      _dueTime.hour,
-      _dueTime.minute,
-    );
-
-    final task = Task(
-      id: widget.existingTask?.id ?? const Uuid().v4(),
+    final task = createTaskFromForm(
       title: title,
-      dueAt: dueAt,
-      isCompleted: widget.existingTask?.isCompleted ?? false,
-      reminderOffsetMinutes: _reminderOffsetMinutes,
+      dueDate: _dueDate,
+      dueTime: _dueTime,
       category: _category,
       priority: _priority,
       recurrence: _recurrence,
-      completedAt: widget.existingTask?.completedAt,
+      reminderOffsetMinutes: _reminderOffsetMinutes,
+      existingTask: widget.existingTask,
     );
 
     final cubit = context.read<TasksCubit>();
@@ -327,184 +250,5 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
 
     if (!mounted) return;
     Navigator.of(context).pop();
-  }
-}
-
-class _DateTimeCard extends StatefulWidget {
-  const _DateTimeCard({
-    required this.icon,
-    required this.label,
-    required this.value,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final String value;
-  final VoidCallback onTap;
-
-  @override
-  State<_DateTimeCard> createState() => _DateTimeCardState();
-}
-
-class _DateTimeCardState extends State<_DateTimeCard> {
-  bool _isHovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-
-    return MouseRegion(
-      onEnter: (_) => setState(() => _isHovered = true),
-      onExit: (_) => setState(() => _isHovered = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        decoration: BoxDecoration(
-          color: theme.cardTheme.color,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: (isDark ? Colors.black : Colors.grey.shade300).withOpacity(
-                _isHovered ? 0.3 : 0.1,
-              ),
-              blurRadius: _isHovered ? 8 : 4,
-              offset: Offset(0, _isHovered ? 3 : 1),
-            ),
-          ],
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: widget.onTap,
-            borderRadius: BorderRadius.circular(12),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Icon(
-                      widget.icon,
-                      color: theme.colorScheme.primary,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.label,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          widget.value,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 16,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _AnimatedButton extends StatefulWidget {
-  const _AnimatedButton({
-    required this.onPressed,
-    required this.label,
-    required this.isPrimary,
-  });
-
-  final VoidCallback onPressed;
-  final String label;
-  final bool isPrimary;
-
-  @override
-  State<_AnimatedButton> createState() => _AnimatedButtonState();
-}
-
-class _AnimatedButtonState extends State<_AnimatedButton>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 150),
-    );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.95,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: (_) {
-        _controller.forward();
-      },
-      onTapUp: (_) {
-        _controller.reverse();
-      },
-      onTapCancel: () {
-        _controller.reverse();
-      },
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: widget.isPrimary
-            ? ElevatedButton(
-                onPressed: widget.onPressed,
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Text(
-                  widget.label,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )
-            : TextButton(
-                onPressed: widget.onPressed,
-                style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: Text(widget.label, style: const TextStyle(fontSize: 16)),
-              ),
-      ),
-    );
   }
 }

@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 
 import '../../domain/entities/task.dart';
 import '../../../../l10n/app_localizations.dart';
+import 'badges/category_badge.dart';
+import 'badges/priority_badge.dart';
+import 'badges/recurrence_badge.dart';
 
 class TaskCard extends StatefulWidget {
   const TaskCard({
@@ -182,11 +185,11 @@ class _TaskCardState extends State<TaskCard>
                               spacing: 6,
                               runSpacing: 4,
                               children: [
-                                _CategoryBadge(category: widget.task.category),
-                                _PriorityBadge(priority: widget.task.priority),
+                                CategoryBadge(category: widget.task.category),
+                                PriorityBadge(priority: widget.task.priority),
                                 if (widget.task.recurrence !=
                                     RecurrenceType.none)
-                                  _RecurrenceBadge(
+                                  RecurrenceBadge(
                                     recurrence: widget.task.recurrence,
                                   ),
                               ],
@@ -253,174 +256,6 @@ class _TaskCardState extends State<TaskCard>
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _CategoryBadge extends StatelessWidget {
-  const _CategoryBadge({required this.category});
-
-  final TaskCategory category;
-
-  String _getCategoryName(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    switch (category) {
-      case TaskCategory.work:
-        return l10n.categoryWork;
-      case TaskCategory.personal:
-        return l10n.categoryPersonal;
-      case TaskCategory.urgent:
-        return l10n.categoryUrgent;
-      case TaskCategory.shopping:
-        return l10n.categoryShopping;
-      case TaskCategory.health:
-        return l10n.categoryHealth;
-      case TaskCategory.other:
-        return l10n.categoryOther;
-    }
-  }
-
-  Color _getCategoryColor() {
-    switch (category) {
-      case TaskCategory.work:
-        return Colors.blue;
-      case TaskCategory.personal:
-        return Colors.green;
-      case TaskCategory.urgent:
-        return Colors.red;
-      case TaskCategory.shopping:
-        return Colors.purple;
-      case TaskCategory.health:
-        return Colors.pink;
-      case TaskCategory.other:
-        return Colors.grey;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _getCategoryColor();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        _getCategoryName(context),
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: color,
-        ),
-      ),
-    );
-  }
-}
-
-class _PriorityBadge extends StatelessWidget {
-  const _PriorityBadge({required this.priority});
-
-  final TaskPriority priority;
-
-  String _getPriorityName(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    switch (priority) {
-      case TaskPriority.low:
-        return l10n.priorityLow;
-      case TaskPriority.medium:
-        return l10n.priorityMedium;
-      case TaskPriority.high:
-        return l10n.priorityHigh;
-    }
-  }
-
-  Color _getPriorityColor() {
-    switch (priority) {
-      case TaskPriority.low:
-        return Colors.green;
-      case TaskPriority.medium:
-        return Colors.orange;
-      case TaskPriority.high:
-        return Colors.red;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final color = _getPriorityColor();
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.flag_rounded, size: 10, color: color),
-          const SizedBox(width: 3),
-          Text(
-            _getPriorityName(context),
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RecurrenceBadge extends StatelessWidget {
-  const _RecurrenceBadge({required this.recurrence});
-
-  final RecurrenceType recurrence;
-
-  String _getRecurrenceName(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    switch (recurrence) {
-      case RecurrenceType.none:
-        return '';
-      case RecurrenceType.daily:
-        return l10n.recurrenceDaily;
-      case RecurrenceType.weekly:
-        return l10n.recurrenceWeekly;
-      case RecurrenceType.monthly:
-        return l10n.recurrenceMonthly;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.primary.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.repeat_rounded,
-            size: 10,
-            color: theme.colorScheme.primary,
-          ),
-          const SizedBox(width: 3),
-          Text(
-            _getRecurrenceName(context),
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ],
       ),
     );
   }

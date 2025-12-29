@@ -1,5 +1,7 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+
+import 'time_segment.dart';
+import 'circular_dial.dart';
 
 class AnimatedTimePicker extends StatefulWidget {
   const AnimatedTimePicker({
@@ -129,7 +131,7 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _TimeSegment(
+                          TimeSegment(
                             value: _selectedHour.toString().padLeft(2, '0'),
                             isSelected: _isSelectingHour,
                             onTap: () {
@@ -147,7 +149,7 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
                               ),
                             ),
                           ),
-                          _TimeSegment(
+                          TimeSegment(
                             value: _selectedMinute.toString().padLeft(2, '0'),
                             isSelected: !_isSelectingHour,
                             onTap: () {
@@ -164,7 +166,7 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
                   padding: const EdgeInsets.all(24),
                   child: FadeTransition(
                     opacity: _dialController,
-                    child: _CircularDial(
+                    child: CircularDial(
                       selectedValue: _isSelectingHour
                           ? _selectedHour
                           : _selectedMinute,
@@ -207,185 +209,4 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
       ),
     );
   }
-}
-
-class _TimeSegment extends StatelessWidget {
-  const _TimeSegment({
-    required this.value,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final String value;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? colorScheme.onPrimary.withOpacity(0.2)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          value,
-          style: TextStyle(
-            color: colorScheme.onPrimary,
-            fontSize: 48,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w300,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CircularDial extends StatefulWidget {
-  const _CircularDial({
-    required this.selectedValue,
-    required this.maxValue,
-    required this.onValueSelected,
-    required this.isHourMode,
-  });
-
-  final int selectedValue;
-  final int maxValue;
-  final Function(int) onValueSelected;
-  final bool isHourMode;
-
-  @override
-  State<_CircularDial> createState() => _CircularDialState();
-}
-
-class _CircularDialState extends State<_CircularDial> {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final size = 280.0;
-
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Stack(
-        children: [
-          // Clock face
-          CustomPaint(
-            size: Size(size, size),
-            painter: _ClockFacePainter(
-              selectedValue: widget.selectedValue,
-              maxValue: widget.maxValue,
-              color: colorScheme.primary,
-              isHourMode: widget.isHourMode,
-            ),
-          ),
-          // Numbers
-          ...List.generate(widget.isHourMode ? 24 : 12, (index) {
-            final value = widget.isHourMode ? index : index * 5;
-            final angle =
-                (math.pi * 2 * value) / (widget.isHourMode ? 24 : 60) -
-                math.pi / 2;
-            final radius = size / 2 - 30;
-            final x = size / 2 + radius * math.cos(angle);
-            final y = size / 2 + radius * math.sin(angle);
-
-            final isSelected = value == widget.selectedValue;
-
-            return Positioned(
-              left: x - 20,
-              top: y - 20,
-              child: GestureDetector(
-                onTap: () => widget.onValueSelected(value),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? colorScheme.primary
-                        : Colors.transparent,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(
-                    value.toString(),
-                    style: TextStyle(
-                      color: isSelected
-                          ? colorScheme.onPrimary
-                          : theme.textTheme.bodyLarge?.color,
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      fontSize: isSelected ? 16 : 14,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }),
-        ],
-      ),
-    );
-  }
-}
-
-class _ClockFacePainter extends CustomPainter {
-  _ClockFacePainter({
-    required this.selectedValue,
-    required this.maxValue,
-    required this.color,
-    required this.isHourMode,
-  });
-
-  final int selectedValue;
-  final int maxValue;
-  final Color color;
-  final bool isHourMode;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = size.width / 2 - 30;
-
-    // Draw circle outline
-    final outlinePaint = Paint()
-      ..color = color.withOpacity(0.1)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    canvas.drawCircle(center, radius, outlinePaint);
-
-    // Draw selection indicator line
-    final angle =
-        (math.pi * 2 * selectedValue) / (isHourMode ? 24 : 60) - math.pi / 2;
-    final lineEnd = Offset(
-      center.dx + radius * math.cos(angle),
-      center.dy + radius * math.sin(angle),
-    );
-
-    final linePaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    canvas.drawLine(center, lineEnd, linePaint);
-
-    // Draw center dot
-    final centerPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, 6, centerPaint);
-  }
-
-  @override
-  bool shouldRepaint(_ClockFacePainter oldDelegate) =>
-      selectedValue != oldDelegate.selectedValue ||
-      isHourMode != oldDelegate.isHourMode;
 }
