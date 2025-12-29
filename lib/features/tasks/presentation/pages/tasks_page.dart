@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,10 +20,30 @@ class TasksPage extends StatefulWidget {
   State<TasksPage> createState() => _TasksPageState();
 }
 
-class _TasksPageState extends State<TasksPage> {
+class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   final List<Task> _tasks = <Task>[];
   var _syncedOnce = false;
+  late final AnimationController _appBarController;
+  late final Animation<double> _settingsRotation;
+
+  @override
+  void initState() {
+    super.initState();
+    _appBarController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _settingsRotation = Tween<double>(begin: 0.0, end: 0.5).animate(
+      CurvedAnimation(parent: _appBarController, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _appBarController.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -41,15 +63,62 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(l10n.dailyTasks),
-        actions: [
-          IconButton(
-            tooltip: l10n.settings,
-            onPressed: () => _openSettings(context),
-            icon: const Icon(Icons.settings_outlined),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: isDark
+                  ? [
+                      const Color(0xFF1F2937).withOpacity(0.85),
+                      const Color(0xFF111827).withOpacity(0.75),
+                    ]
+                  : [
+                      Colors.white.withOpacity(0.85),
+                      const Color(0xFFF9FAFB).withOpacity(0.75),
+                    ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+        ),
+        title: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: theme.textTheme.titleLarge!.copyWith(
+            fontWeight: FontWeight.w700,
+            color: theme.colorScheme.onSurface,
+          ),
+          child: Text(l10n.dailyTasks),
+        ),
+        actions: [
+          RotationTransition(
+            turns: _settingsRotation,
+            child: IconButton(
+              tooltip: l10n.settings,
+              onPressed: () {
+                _appBarController.forward().then((_) {
+                  _appBarController.reverse();
+                });
+                _openSettings(context);
+              },
+              icon: const Icon(Icons.settings_outlined),
+              style: IconButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                foregroundColor: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: BlocConsumer<TasksCubit, TasksState>(
@@ -59,7 +128,31 @@ class _TasksPageState extends State<TasksPage> {
         },
         builder: (context, state) {
           if (state is TasksLoading || state is TasksInitial) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 3,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        theme.colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 300),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                    child: Text(l10n.appTitle),
+                  ),
+                ],
+              ),
+            );
           }
 
           if (state is TasksError) {
@@ -119,9 +212,15 @@ class _TasksPageState extends State<TasksPage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _openUpsert(context),
-        child: const Icon(Icons.add),
+      floatingActionButton: ScaleTransition(
+        scale: CurvedAnimation(
+          parent: const AlwaysStoppedAnimation(1.0),
+          curve: Curves.easeInOut,
+        ),
+        child: FloatingActionButton(
+          onPressed: () => _openUpsert(context),
+          child: const Icon(Icons.add_rounded, size: 28),
+        ),
       ),
     );
   }
