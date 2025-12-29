@@ -11,6 +11,7 @@ import '../../../settings/presentation/pages/settings_page.dart';
 import '../cubit/tasks_cubit.dart';
 import '../cubit/tasks_state.dart';
 import '../widgets/task_card.dart';
+import '../utils/filter_builders.dart';
 import 'statistics_page.dart';
 import 'upsert_task_page.dart';
 
@@ -125,53 +126,10 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
                 _statusFilter = value;
               });
             },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: 'all',
-                child: Row(
-                  children: [
-                    Icon(
-                      _statusFilter == 'all'
-                          ? Icons.check
-                          : Icons.circle_outlined,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(l10n.filterAll),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'active',
-                child: Row(
-                  children: [
-                    Icon(
-                      _statusFilter == 'active'
-                          ? Icons.check
-                          : Icons.circle_outlined,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(l10n.filterActive),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: 'completed',
-                child: Row(
-                  children: [
-                    Icon(
-                      _statusFilter == 'completed'
-                          ? Icons.check
-                          : Icons.circle_outlined,
-                      size: 18,
-                    ),
-                    const SizedBox(width: 8),
-                    Text(l10n.filterCompleted),
-                  ],
-                ),
-              ),
-            ],
+            itemBuilder: (context) => buildTaskFilterItems(
+              selectedFilter: _statusFilter,
+              l10n: l10n,
+            ),
           ),
           const SizedBox(width: 4),
           RotationTransition(
