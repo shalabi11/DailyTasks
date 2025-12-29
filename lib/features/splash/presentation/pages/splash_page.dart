@@ -39,13 +39,13 @@ class _SplashPageState extends State<SplashPage>
 
     Timer(const Duration(milliseconds: 900), () async {
       if (!mounted) return;
-      
+
       // Check if intro has been completed
       final prefs = await SharedPreferences.getInstance();
       final introCompleted = prefs.getBool('intro_completed') ?? false;
-      
+
       if (!mounted) return;
-      
+
       if (introCompleted) {
         Navigator.of(context).pushReplacement(fadeRoute(const TasksPage()));
       } else {

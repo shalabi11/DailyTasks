@@ -128,10 +128,7 @@ class _IntroPageState extends State<IntroPage> {
                     title: l10n.introTitle4,
                     description: l10n.introDescription4,
                     gradient: LinearGradient(
-                      colors: [
-                        colorScheme.primary,
-                        colorScheme.tertiary,
-                      ],
+                      colors: [colorScheme.primary, colorScheme.tertiary],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -200,12 +197,8 @@ class _IntroPageState extends State<IntroPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          _currentPage == 3
-                              ? l10n.getStarted
-                              : l10n.next,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          _currentPage == 3 ? l10n.getStarted : l10n.next,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 8),
                         Icon(
@@ -264,11 +257,7 @@ class _IntroSlide extends StatelessWidget {
                 ),
               ],
             ),
-            child: Icon(
-              icon,
-              size: 80,
-              color: Colors.white,
-            ),
+            child: Icon(icon, size: 80, color: Colors.white),
           ),
           const SizedBox(height: 48),
           // Title

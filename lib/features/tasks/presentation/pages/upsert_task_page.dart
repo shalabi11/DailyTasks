@@ -82,7 +82,7 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
         opacity: _fadeAnimation,
         child: SlideTransition(
           position: _slideAnimation,
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -237,7 +237,7 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                     });
                   },
                 ),
-                const Spacer(),
+                const SizedBox(height: 24),
                 _AnimatedButton(
                   onPressed: _save,
                   label: l10n.save,
