@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/navigation/app_page_route.dart';
+import '../../../intro/presentation/pages/intro_page.dart';
 import '../../../tasks/presentation/pages/tasks_page.dart';
 import '../../../../l10n/app_localizations.dart';
 
@@ -35,9 +37,20 @@ class _SplashPageState extends State<SplashPage>
 
     unawaited(_controller.forward());
 
-    Timer(const Duration(milliseconds: 900), () {
+    Timer(const Duration(milliseconds: 900), () async {
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(fadeRoute(const TasksPage()));
+      
+      // Check if intro has been completed
+      final prefs = await SharedPreferences.getInstance();
+      final introCompleted = prefs.getBool('intro_completed') ?? false;
+      
+      if (!mounted) return;
+      
+      if (introCompleted) {
+        Navigator.of(context).pushReplacement(fadeRoute(const TasksPage()));
+      } else {
+        Navigator.of(context).pushReplacement(fadeRoute(const IntroPage()));
+      }
     });
   }
 

@@ -20,7 +20,8 @@ class AnimatedDateRangePicker extends StatefulWidget {
   final String? locale;
 
   @override
-  State<AnimatedDateRangePicker> createState() => _AnimatedDateRangePickerState();
+  State<AnimatedDateRangePicker> createState() =>
+      _AnimatedDateRangePickerState();
 }
 
 class _AnimatedDateRangePickerState extends State<AnimatedDateRangePicker>
@@ -41,12 +42,14 @@ class _AnimatedDateRangePickerState extends State<AnimatedDateRangePicker>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.95,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     _controller.forward();
   }
 
@@ -177,13 +180,16 @@ class _AnimatedDateRangePickerState extends State<AnimatedDateRangePicker>
                 ),
                 // Helper text
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 8,
+                  ),
                   child: Text(
                     _startDate == null
                         ? 'Select start date'
                         : _endDate == null
-                            ? 'Select end date'
-                            : 'Range selected',
+                        ? 'Select end date'
+                        : 'Range selected',
                     style: TextStyle(
                       color: colorScheme.primary,
                       fontSize: 14,

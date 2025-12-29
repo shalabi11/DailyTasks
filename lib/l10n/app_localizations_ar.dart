@@ -169,4 +169,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get taskRemindersChannelDescription => 'إشعارات تذكير للمهام المجدولة';
+
+  @override
+  String get skip => 'تخطي';
+
+  @override
+  String get back => 'رجوع';
+
+  @override
+  String get next => 'التالي';
+
+  @override
+  String get getStarted => 'ابدأ الآن';
+
+  @override
+  String get introTitle1 => 'مرحباً بك في المهام اليومية';
+
+  @override
+  String get introDescription1 =>
+      'نظم مهامك اليومية بكفاءة مع مدير المهام الجميل والبديهي. ابقَ منتجاً ولا تفوت أي موعد نهائي.';
+
+  @override
+  String get introTitle2 => 'التنظيم بالفئات';
+
+  @override
+  String get introDescription2 =>
+      'صنّف مهامك حسب العمل، الشخصية، العاجلة، التسوق، الصحة، والمزيد. حدد الأولويات للتركيز على الأهم.';
+
+  @override
+  String get introTitle3 => 'تذكيرات ذكية';
+
+  @override
+  String get introDescription3 =>
+      'لا تنسى المهام المهمة أبداً مع التذكيرات القابلة للتخصيص. احصل على إشعارات في الوقت المناسب لتبقى على المسار الصحيح.';
+
+  @override
+  String get introTitle4 => 'هل أنت جاهز للبدء؟';
+
+  @override
+  String get introDescription4 =>
+      'ابدأ في إدارة مهامك بفعالية اليوم. تتبع تقدمك بالإحصائيات وحقق أهدافك.';
 }

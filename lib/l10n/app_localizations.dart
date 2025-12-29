@@ -409,6 +409,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reminder notifications for scheduled tasks'**
   String get taskRemindersChannelDescription;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get back;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @introTitle1.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Daily Tasks'**
+  String get introTitle1;
+
+  /// No description provided for @introDescription1.
+  ///
+  /// In en, this message translates to:
+  /// **'Organize your daily tasks efficiently with our beautiful and intuitive task manager. Stay productive and never miss a deadline.'**
+  String get introDescription1;
+
+  /// No description provided for @introTitle2.
+  ///
+  /// In en, this message translates to:
+  /// **'Organize with Categories'**
+  String get introTitle2;
+
+  /// No description provided for @introDescription2.
+  ///
+  /// In en, this message translates to:
+  /// **'Categorize your tasks by Work, Personal, Urgent, Shopping, Health, and more. Set priorities to focus on what matters most.'**
+  String get introDescription2;
+
+  /// No description provided for @introTitle3.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Reminders'**
+  String get introTitle3;
+
+  /// No description provided for @introDescription3.
+  ///
+  /// In en, this message translates to:
+  /// **'Never forget important tasks with customizable reminders. Get notified at the right time to stay on track.'**
+  String get introDescription3;
+
+  /// No description provided for @introTitle4.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to Start?'**
+  String get introTitle4;
+
+  /// No description provided for @introDescription4.
+  ///
+  /// In en, this message translates to:
+  /// **'Start managing your tasks effectively today. Track your progress with statistics and achieve your goals.'**
+  String get introDescription4;
 }
 
 class _AppLocalizationsDelegate

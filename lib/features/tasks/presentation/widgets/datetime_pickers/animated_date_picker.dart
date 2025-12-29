@@ -34,12 +34,14 @@ class _AnimatedDatePickerState extends State<AnimatedDatePicker>
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.95,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
     _controller.forward();
   }
 
@@ -105,8 +107,9 @@ class _AnimatedDatePickerState extends State<AnimatedDatePicker>
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              DateFormat.yMMMMd(widget.locale)
-                                  .format(widget.initialDate),
+                              DateFormat.yMMMMd(
+                                widget.locale,
+                              ).format(widget.initialDate),
                               style: TextStyle(
                                 color: colorScheme.onPrimary.withOpacity(0.9),
                                 fontSize: 14,

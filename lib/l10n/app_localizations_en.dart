@@ -170,4 +170,44 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get taskRemindersChannelDescription =>
       'Reminder notifications for scheduled tasks';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get back => 'Back';
+
+  @override
+  String get next => 'Next';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get introTitle1 => 'Welcome to Daily Tasks';
+
+  @override
+  String get introDescription1 =>
+      'Organize your daily tasks efficiently with our beautiful and intuitive task manager. Stay productive and never miss a deadline.';
+
+  @override
+  String get introTitle2 => 'Organize with Categories';
+
+  @override
+  String get introDescription2 =>
+      'Categorize your tasks by Work, Personal, Urgent, Shopping, Health, and more. Set priorities to focus on what matters most.';
+
+  @override
+  String get introTitle3 => 'Smart Reminders';
+
+  @override
+  String get introDescription3 =>
+      'Never forget important tasks with customizable reminders. Get notified at the right time to stay on track.';
+
+  @override
+  String get introTitle4 => 'Ready to Start?';
+
+  @override
+  String get introDescription4 =>
+      'Start managing your tasks effectively today. Track your progress with statistics and achieve your goals.';
 }

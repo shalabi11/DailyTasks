@@ -42,9 +42,10 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
     _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
       CurvedAnimation(parent: _scaleController, curve: Curves.easeOutBack),
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _scaleController, curve: Curves.easeOut),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeOut));
     _scaleController.forward();
   }
 
@@ -63,7 +64,9 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
   }
 
   void _onConfirm() {
-    widget.onTimeSelected(TimeOfDay(hour: _selectedHour, minute: _selectedMinute));
+    widget.onTimeSelected(
+      TimeOfDay(hour: _selectedHour, minute: _selectedMinute),
+    );
     Navigator.of(context).pop();
   }
 
@@ -162,7 +165,9 @@ class _AnimatedTimePickerState extends State<AnimatedTimePicker>
                   child: FadeTransition(
                     opacity: _dialController,
                     child: _CircularDial(
-                      selectedValue: _isSelectingHour ? _selectedHour : _selectedMinute,
+                      selectedValue: _isSelectingHour
+                          ? _selectedHour
+                          : _selectedMinute,
                       maxValue: _isSelectingHour ? 23 : 59,
                       onValueSelected: (value) {
                         setState(() {
@@ -284,53 +289,49 @@ class _CircularDialState extends State<_CircularDial> {
             ),
           ),
           // Numbers
-          ...List.generate(
-            widget.isHourMode ? 24 : 12,
-            (index) {
-              final value = widget.isHourMode
-                  ? index
-                  : index * 5;
-              final angle = (math.pi * 2 * value) /
-                  (widget.isHourMode ? 24 : 60) -
-                  math.pi / 2;
-              final radius = size / 2 - 30;
-              final x = size / 2 + radius * math.cos(angle);
-              final y = size / 2 + radius * math.sin(angle);
+          ...List.generate(widget.isHourMode ? 24 : 12, (index) {
+            final value = widget.isHourMode ? index : index * 5;
+            final angle =
+                (math.pi * 2 * value) / (widget.isHourMode ? 24 : 60) -
+                math.pi / 2;
+            final radius = size / 2 - 30;
+            final x = size / 2 + radius * math.cos(angle);
+            final y = size / 2 + radius * math.sin(angle);
 
-              final isSelected = value == widget.selectedValue;
+            final isSelected = value == widget.selectedValue;
 
-              return Positioned(
-                left: x - 20,
-                top: y - 20,
-                child: GestureDetector(
-                  onTap: () => widget.onValueSelected(value),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
+            return Positioned(
+              left: x - 20,
+              top: y - 20,
+              child: GestureDetector(
+                onTap: () => widget.onValueSelected(value),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? colorScheme.primary
+                        : Colors.transparent,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    value.toString(),
+                    style: TextStyle(
                       color: isSelected
-                          ? colorScheme.primary
-                          : Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      value.toString(),
-                      style: TextStyle(
-                        color: isSelected
-                            ? colorScheme.onPrimary
-                            : theme.textTheme.bodyLarge?.color,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
-                        fontSize: isSelected ? 16 : 14,
-                      ),
+                          ? colorScheme.onPrimary
+                          : theme.textTheme.bodyLarge?.color,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: isSelected ? 16 : 14,
                     ),
                   ),
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          }),
         ],
       ),
     );
@@ -363,8 +364,8 @@ class _ClockFacePainter extends CustomPainter {
     canvas.drawCircle(center, radius, outlinePaint);
 
     // Draw selection indicator line
-    final angle = (math.pi * 2 * selectedValue) / (isHourMode ? 24 : 60) -
-        math.pi / 2;
+    final angle =
+        (math.pi * 2 * selectedValue) / (isHourMode ? 24 : 60) - math.pi / 2;
     final lineEnd = Offset(
       center.dx + radius * math.cos(angle),
       center.dy + radius * math.sin(angle),

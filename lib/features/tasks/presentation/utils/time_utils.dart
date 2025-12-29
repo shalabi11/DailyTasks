@@ -19,9 +19,7 @@ String formatTime(TimeOfDay time, {String? locale, bool is24Hour = false}) {
     time.hour,
     time.minute,
   );
-  final timeFormat = is24Hour
-      ? DateFormat.Hm(locale)
-      : DateFormat.jm(locale);
+  final timeFormat = is24Hour ? DateFormat.Hm(locale) : DateFormat.jm(locale);
   return timeFormat.format(dateTime);
 }
 
@@ -34,11 +32,7 @@ String formatDateTime(DateTime dateTime, {String? locale, String? format}) {
 }
 
 /// Formats a date range
-String formatDateRange(
-  DateTime startDate,
-  DateTime endDate, {
-  String? locale,
-}) {
+String formatDateRange(DateTime startDate, DateTime endDate, {String? locale}) {
   final start = DateFormat.MMMd(locale).format(startDate);
   final end = DateFormat.MMMd(locale).format(endDate);
   return '$start - $end';
@@ -63,13 +57,7 @@ TimeOfDay dateTimeToTimeOfDay(DateTime dateTime) {
 
 /// Combines a date and time into a single DateTime
 DateTime combineDateAndTime(DateTime date, TimeOfDay time) {
-  return DateTime(
-    date.year,
-    date.month,
-    date.day,
-    time.hour,
-    time.minute,
-  );
+  return DateTime(date.year, date.month, date.day, time.hour, time.minute);
 }
 
 /// Gets the relative time string (e.g., "Today", "Tomorrow", "Yesterday")

@@ -65,6 +65,23 @@
   "taskRemindersChannelName": "Task reminders",
   "taskRemindersChannelDescription": "Reminder notifications for scheduled tasks",
 
+  "skip": "Skip",
+  "back": "Back",
+  "next": "Next",
+  "getStarted": "Get Started",
+  
+  "introTitle1": "Welcome to Daily Tasks",
+  "introDescription1": "Organize your daily tasks efficiently with our beautiful and intuitive task manager. Stay productive and never miss a deadline.",
+  
+  "introTitle2": "Organize with Categories",
+  "introDescription2": "Categorize your tasks by Work, Personal, Urgent, Shopping, Health, and more. Set priorities to focus on what matters most.",
+  
+  "introTitle3": "Smart Reminders",
+  "introDescription3": "Never forget important tasks with customizable reminders. Get notified at the right time to stay on track.",
+  
+  "introTitle4": "Ready to Start?",
+  "introDescription4": "Start managing your tasks effectively today. Track your progress with statistics and achieve your goals.",
+
   "@@reminderMinutesBefore": {
     "placeholders": {
       "minutes": {"type": "int"}
