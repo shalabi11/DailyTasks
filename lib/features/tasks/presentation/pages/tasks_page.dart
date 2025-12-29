@@ -131,7 +131,9 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
                 child: Row(
                   children: [
                     Icon(
-                      _statusFilter == 'all' ? Icons.check : Icons.circle_outlined,
+                      _statusFilter == 'all'
+                          ? Icons.check
+                          : Icons.circle_outlined,
                       size: 18,
                     ),
                     const SizedBox(width: 8),
@@ -144,7 +146,9 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
                 child: Row(
                   children: [
                     Icon(
-                      _statusFilter == 'active' ? Icons.check : Icons.circle_outlined,
+                      _statusFilter == 'active'
+                          ? Icons.check
+                          : Icons.circle_outlined,
                       size: 18,
                     ),
                     const SizedBox(width: 8),
@@ -157,7 +161,9 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
                 child: Row(
                   children: [
                     Icon(
-                      _statusFilter == 'completed' ? Icons.check : Icons.circle_outlined,
+                      _statusFilter == 'completed'
+                          ? Icons.check
+                          : Icons.circle_outlined,
                       size: 18,
                     ),
                     const SizedBox(width: 8),
@@ -362,19 +368,21 @@ class _TasksPageState extends State<TasksPage> with TickerProviderStateMixin {
 
   List<Task> _filterTasks(List<Task> tasks) {
     var filtered = tasks;
-    
+
     // Filter by status
     if (_statusFilter == 'active') {
       filtered = filtered.where((t) => !t.isCompleted).toList();
     } else if (_statusFilter == 'completed') {
       filtered = filtered.where((t) => t.isCompleted).toList();
     }
-    
+
     // Filter by category
     if (_selectedCategory != null) {
-      filtered = filtered.where((t) => t.category == _selectedCategory).toList();
+      filtered = filtered
+          .where((t) => t.category == _selectedCategory)
+          .toList();
     }
-    
+
     return filtered;
   }
 

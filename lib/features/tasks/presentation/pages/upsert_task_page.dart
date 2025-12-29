@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../domain/entities/task.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../cubit/tasks_cubit.dart';
+import '../widgets/datetime_pickers/animated_date_picker.dart';
+import '../widgets/datetime_pickers/animated_time_picker.dart';
+import '../utils/time_utils.dart';
 
 class UpsertTaskPage extends StatefulWidget {
   const UpsertTaskPage({super.key, this.existingTask});
@@ -97,14 +99,14 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
                 _DateTimeCard(
                   icon: Icons.calendar_today_rounded,
                   label: l10n.dueDateLabel,
-                  value: DateFormat.yMMMd(localeTag).format(_dueDate),
+                  value: formatDate(_dueDate, locale: localeTag),
                   onTap: _pickDate,
                 ),
                 const SizedBox(height: 8),
                 _DateTimeCard(
                   icon: Icons.access_time_rounded,
                   label: l10n.dueTimeLabel,
-                  value: _dueTime.format(context),
+                  value: formatTime(_dueTime, locale: localeTag),
                   onTap: _pickTime,
                 ),
                 const SizedBox(height: 16),
@@ -256,31 +258,34 @@ class _UpsertTaskPageState extends State<UpsertTaskPage>
   }
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
+    await showDialog(
       context: context,
-      initialDate: _dueDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      builder: (context) => AnimatedDatePicker(
+        initialDate: _dueDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        locale: Localizations.localeOf(context).languageCode,
+        onDateSelected: (picked) {
+          setState(() {
+            _dueDate = DateUtils.dateOnly(picked);
+          });
+        },
+      ),
     );
-
-    if (picked == null) return;
-
-    setState(() {
-      _dueDate = DateUtils.dateOnly(picked);
-    });
   }
 
   Future<void> _pickTime() async {
-    final picked = await showTimePicker(
+    await showDialog(
       context: context,
-      initialTime: _dueTime,
+      builder: (context) => AnimatedTimePicker(
+        initialTime: _dueTime,
+        onTimeSelected: (picked) {
+          setState(() {
+            _dueTime = picked;
+          });
+        },
+      ),
     );
-
-    if (picked == null) return;
-
-    setState(() {
-      _dueTime = picked;
-    });
   }
 
   Future<void> _save() async {

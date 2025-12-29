@@ -184,8 +184,11 @@ class _TaskCardState extends State<TaskCard>
                               children: [
                                 _CategoryBadge(category: widget.task.category),
                                 _PriorityBadge(priority: widget.task.priority),
-                                if (widget.task.recurrence != RecurrenceType.none)
-                                  _RecurrenceBadge(recurrence: widget.task.recurrence),
+                                if (widget.task.recurrence !=
+                                    RecurrenceType.none)
+                                  _RecurrenceBadge(
+                                    recurrence: widget.task.recurrence,
+                                  ),
                               ],
                             ),
                             const SizedBox(height: 6),
